@@ -1,34 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { FormItemService } from './form-item.service';
 import { CreateFormItemDto } from './dto/create-form-item.dto';
 import { UpdateFormItemDto } from './dto/update-form-item.dto';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('form-item')
 export class FormItemController {
-  constructor(private readonly formItemService: FormItemService) {}
+  constructor(private readonly formItemService: FormItemService) { }
 
-  @Post()
-  create(@Body() createFormItemDto: CreateFormItemDto) {
-    return this.formItemService.create(createFormItemDto);
+  @UseGuards(JwtAuthGuard)
+  @Post(':formId')
+  create(
+    @Param('formId') formId: string,
+    @Body() createFormItemDto: CreateFormItemDto,
+    @Req() req: Request
+  ) {
+    const user = req.user;
+    return this.formItemService.create(+formId, createFormItemDto, user);
   }
 
-  @Get()
-  findAll() {
-    return this.formItemService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Get(':formId')
+  findAll(
+    @Param('formId') formId: string
+  ) {
+    return this.formItemService.findAll(+formId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.formItemService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get(':uuid')
+  findOne(@Param('uuid') uuid: string) {
+    return this.formItemService.findOne(uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFormItemDto: UpdateFormItemDto) {
-    return this.formItemService.update(+id, updateFormItemDto);
+  @UseGuards(JwtAuthGuard)
+  @Patch(':uuid')
+  update(
+    @Param('uuid') uuid: string, 
+    @Body() updateFormItemDto: UpdateFormItemDto,
+    @Req() req: Request) {
+    const user = req.user;
+    return this.formItemService.update(uuid, updateFormItemDto, user);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.formItemService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Delete(':uuid')
+  remove(@Param('uuid') uuid: string) {
+    return this.formItemService.remove(uuid);
   }
 }

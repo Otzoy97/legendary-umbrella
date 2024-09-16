@@ -7,20 +7,28 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 export class Form {
     @PrimaryGeneratedColumn()
     id: number;
-    @Column({ type: 'varchar' })
+
+    @Column({ type: 'varchar', nullable: false })
     name: string;
-    @Column({ type: 'text' })
+
+    @Column({ type: 'text', default: "" })
     description: string;
-    @OneToMany(() => FormItem, formItem => formItem.form)
+
+    @OneToMany(() => FormItem, formItem => formItem.form, { cascade: true, onDelete: 'CASCADE' })
     items: FormItem[];
-    @OneToMany(() => FormResponse, formResponse => formResponse.form)
+
+    @OneToMany(() => FormResponse, formResponse => formResponse.form, { cascade: true, onDelete: 'CASCADE' })
     responses: FormResponse[];
+
     @CreateDateColumn({ type: 'datetime' })
     createdAt: Date;
+
     @CreateDateColumn({ type: 'datetime' })
     updatedAt: Date;
+
     @ManyToOne(() => User)
     createdBy: User;
+    
     @ManyToOne(() => User)
     updatedBy: User;
 }

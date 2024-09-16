@@ -5,6 +5,7 @@ import { compare } from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { LogInAuthDto } from './dto/signup-auth.dto';
+import { response } from 'src/response/response';
 
 @Injectable()
 export class AuthService {
@@ -15,14 +16,14 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) { }
 
-  async validateUser(logInAuthDto: LogInAuthDto): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     // Check if the user exists
-    const user = await this.userRepository.findOne({ where: { username: logInAuthDto.username } });
+    const user = await this.userRepository.findOne({ where: { username } });
     if (!user) {
       return null;
     }
     // Check if the password is correct
-    const match = await compare(logInAuthDto.password, user.password);
+    const match = await compare(pass, user.password);
     if (!match) {
       return null;
     }
@@ -31,9 +32,11 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload)
-    };
+    const payload = { username: user.username, sub: user.id };
+    return response(
+      'User logged in successfully',
+      { access_token: this.jwtService.sign(payload) }
+    );
+
   }
 }

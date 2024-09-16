@@ -1,1 +1,10 @@
-export class CreateFormDto {}
+import { IsNotEmpty, IsString, MaxLength } from "class-validator";
+
+export class CreateFormDto {
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(255)
+    name: string;
+
+    description: string;
+}

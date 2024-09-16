@@ -5,6 +5,7 @@ import { hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { response } from 'src/response/response';
 
 @Injectable()
 export class UserService {
@@ -30,9 +31,10 @@ export class UserService {
       password: hashedPassword
     })
     const payload = { username: newUser.username, sub: newUser.id }
-    return {
-      access_token: this.jwtService.sign(payload)
-    }
+    return response(
+      'User created successfully',
+      { access_token: this.jwtService.sign(payload) }
+    );
   }
 
 }

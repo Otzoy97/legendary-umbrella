@@ -1,0 +1,41 @@
+<div class="layout-topbar">
+
+  <a href="#" class="layout-menubutton" [ngClass]="{'layout-menubutton-active': app.menuActive}"
+    (click)="app.onMenuButtonClick($event)">
+    <div class="layout-menubutton-icon"></div>
+  </a>
+
+  <div class="layout-topbar-grid">
+    <div class="layout-topbar-grid-column layout-topbar-grid-column-fixed">
+      <a href="#" class="layout-logo">
+        <img src="" style="height: 50px;" alt="logo" />
+      </a>
+    </div>
+
+    <div class="layout-topbar-grid-column">
+      <app-menu></app-menu>
+    </div>
+
+    <div class="layout-topbar-grid-column layout-topbar-grid-column-fixed">
+      <a href="#" (click)="app.onTopbarUserMenuButtonClick($event)">
+        <p-avatar [label]="avatarLabel" size="large" shape="circle"
+          [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"></p-avatar>
+      </a>
+      <ul class="layout-profile-menu fadeInDown" [ngClass]="{'layout-profile-menu-active': app.topbarUserMenuActive}"
+        (click)="app.onTopbarUserMenuClick($event)">
+        <li role="menuitem">
+          <a [routerLink]="profileRouterLink" pRipple (click)="app.onTopbarSubItemClick($event)">
+            <i class="pi pi-user"></i>
+            <span>Perfil</span>
+          </a>
+        </li>
+        <li role="menuitem">
+          <a href="#" pRipple (click)="logout()">
+            <i class="pi pi-sign-out"></i>
+            <span>Salir</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

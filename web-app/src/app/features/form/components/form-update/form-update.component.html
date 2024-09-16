@@ -1,0 +1,28 @@
+<form [formGroup]="formDetails">
+  <div class="grid p-fluid">
+    <div class="col">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" pInputText id="name" formControlName="name" required autofocus
+          [ngClass]="{'ng-invalid ng-dirty' : name.invalid && name.touched}" />
+        <ng-container *ngIf="name.invalid && name.touched">
+          <small class="ng-dirty ng-invalid" *ngIf="name.hasError('required')">* Name is required</small>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="grid p-fluid">
+    <div class="col">
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea pInputTextarea  id="description" formControlName="description"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-content-end">
+    <button pButton pRipple type="button" label="Cancel" icon="pi pi-times" class="p-button-text"
+      (click)="ref.close()"></button>
+    <button pButton pRipple type="submit" label="Save" icon="pi pi-check" class="p-button-success"
+      (click)="save()"></button>
+  </div>
+</form>

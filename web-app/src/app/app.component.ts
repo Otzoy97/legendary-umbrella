@@ -5,5 +5,11 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'web-app';
+  horizontal = true;
+  ripple = true;
+  compactMode = false;
+  topbarColor = 'layout-topbar-night';
+  menuColor = 'layout-menu-light';
+  topbarSize = 'large';
+  inputStyle = 'outlined';
 }

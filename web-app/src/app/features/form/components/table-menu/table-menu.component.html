@@ -1,1 +1,8 @@
-<p>table-menu works!</p>
+<p-menu 
+  #menu 
+  [model]="(menuItems$ | async)!" 
+  [popup]="true" appendTo="body" 
+  (onShow)="showMenu(form)">
+</p-menu>
+<button pButton pRipple icon="pi pi-bars" pTooltip="Menu" tooltipPosition="top" class="p-button-info mr-2"
+  (click)="menu.toggle($event)"></button>

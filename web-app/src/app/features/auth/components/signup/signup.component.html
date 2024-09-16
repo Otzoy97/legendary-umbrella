@@ -1,0 +1,36 @@
+<form [formGroup]="formDetails">
+  <div class="grid">
+    <div class="col-12">
+      <span class="p-float-label">
+        <input formControlName="username" type="text" id="username" pInputText autocomplete="username"
+          [ngClass]="{'ng-invalid ng-dirty' : username.invalid && username.touched}">
+        <label for="username">Username</label>
+      </span>
+      <ng-container *ngIf="username.invalid && username.touched">
+        <span class="text-pink-500" *ngIf="username.hasError('required')">* Username is required</span>
+      </ng-container>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <span class="p-float-label">
+        <input formControlName="password" type="password" id="password" pInputText autocomplete="current-password"
+          [ngClass]="{'ng-invalid ng-dirty' : password.invalid && password.touched}">
+        <label for="password">Password</label>
+      </span>
+      <ng-container *ngIf="password.invalid && password.touched">
+        <span class="text-pink-500" *ngIf="password.hasError('required')">* Password is required</span>
+      </ng-container>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <button pButton pRipple label="Log in" style="width: 100%" (click)="signUp()"></button>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      Have an account already? <a [routerLink]="['/auth/password-forgot']">Log in!</a>
+    </div>
+  </div>
+</form>

@@ -39,8 +39,9 @@ export class FormService {
     const pageSize = query.pageSize;
     const [forms, total] = await this.formRepository.findAndCount({
       skip: (page - 1) * pageSize,
-      take: pageSize
-    });
+      take: pageSize,
+      relations: ['createdBy', 'updatedBy']
+  });
 
     const payload = {
       data: forms,

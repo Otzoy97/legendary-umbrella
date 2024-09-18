@@ -4,8 +4,8 @@ import { UpdateFormItemDto } from './dto/update-form-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { FormItem } from './entities/form-item.entity';
-import { Form } from 'src/form/entities/form.entity';
-import { response } from 'src/response/response';
+import { Form } from '../form/entities/form.entity';
+import { response } from '../response/response';
 
 @Injectable()
 export class FormItemService {
@@ -45,7 +45,6 @@ export class FormItemService {
         order: maxOrder + 1
       });
       const persistedNewItem = await manager.save(newItem);
-      console.log(persistedNewItem);
       return response('Form item created successfully', persistedNewItem);
     });
   }

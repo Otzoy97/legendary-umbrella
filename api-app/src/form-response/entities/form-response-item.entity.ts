@@ -1,5 +1,5 @@
-import { FormItem } from "src/form-item/entities/form-item.entity";
-import { FormResponse } from "src/form-response/entities/form-response.entity";
+import { FormItem } from "../../form-item/entities/form-item.entity";
+import { FormResponse } from "../../form-response/entities/form-response.entity";
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

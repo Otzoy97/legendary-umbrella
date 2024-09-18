@@ -1,6 +1,6 @@
-import { Form } from "src/form/entities/form.entity";
+import { Form } from "../../form/entities/form.entity";
 import { Check, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { FormResponseItem } from "src/form-response/entities/form-response-item.entity";
+import { FormResponseItem } from "../../form-response/entities/form-response-item.entity";
 
 @Entity()
 @Check(`"type" IN ('text', 'number', 'multiple', 'date', 'single')`)

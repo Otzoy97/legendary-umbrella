@@ -1,6 +1,6 @@
-import { FormResponseItem } from "src/form-response/entities/form-response-item.entity";
-import { Form } from "src/form/entities/form.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { FormResponseItem } from "../../form-response/entities/form-response-item.entity";
+import { Form } from "../../form/entities/form.entity";
 
 
 @Entity()

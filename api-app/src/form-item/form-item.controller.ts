@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { FormItemService } from './form-item.service';
 import { CreateFormItemDto } from './dto/create-form-item.dto';
 import { UpdateFormItemDto } from './dto/update-form-item.dto';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { Request } from 'express';
 
 @Controller('form-item')

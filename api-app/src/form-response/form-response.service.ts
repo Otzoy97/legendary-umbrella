@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FormResponseItem } from './entities/form-response-item.entity';
-import { Form } from 'src/form/entities/form.entity';
-import { response } from 'src/response/response';
+import { Form } from '../form/entities/form.entity';
+import { response } from '../response/response';
 import { Repository } from 'typeorm';
 import { CreateFormResponseDto } from './dto/create-form-response.dto';
 import { FormResponse } from './entities/form-response.entity';

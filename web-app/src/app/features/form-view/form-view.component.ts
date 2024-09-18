@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Form } from '../../shared/interfaces/form.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormService } from '../form/services/form.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -28,7 +28,8 @@ export class FormViewComponent implements OnInit {
     private readonly formItemService: FormItemService,
     private readonly messageService: MessageService,
     private readonly formService: FormService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class FormViewComponent implements OnInit {
           severity: 'error',
           detail: err.error.message || 'An error occurred while loading the form'
         });
+        this.router.navigate(['/notfound']);
       }
     });
   }

@@ -60,6 +60,7 @@ import { TopbarComponent } from './core/components/topbar/topbar.component';
 import { MenuService } from './core/components/menu/menu.service';
 import { MenuComponent } from './core/components/menu/menu.component';
 import { MenuItemComponent } from './core/components/menuitem/menuitem.component';
+import { FormShareComponent } from './shared/components/form-share/form-share.component';
 
 @NgModule({
   imports: [
@@ -125,7 +126,8 @@ import { MenuItemComponent } from './core/components/menuitem/menuitem.component
     FormSingleComponent,
     FormMultipleComponent,
     FormControlComponent,
-    FormViewComponent
+    FormViewComponent,
+    FormShareComponent
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },

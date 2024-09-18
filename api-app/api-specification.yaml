@@ -1,0 +1,871 @@
+openapi: 3.0.0
+info:
+  title: legendary-umbrella-api
+  description: The API for the Legendary Umbrella forms project
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/SOTZOY97/legendary-umbrella/1.0.0
+  description: Legendary umbrella mocking
+paths:
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      operationId: logIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_login_body'
+            example:
+              name: admin
+              description: Admin-12345
+        required: true
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              example:
+                message: User logged in successfully
+                payload:
+                  access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjoxLCJpYXQiOjE3MjY2NzE3ODUsImV4cCI6MTcyOTI2Mzc4NX0.CRmIXRuUdlW2g6STqey0HyYCBgPnQp86dyhNXmoT1eU
+  /form:
+    get:
+      tags:
+      - Forms
+      description: retrieves paginated forms
+      operationId: getForms
+      parameters:
+      - name: page
+        in: query
+        description: number of the page to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page_size
+        in: query
+        description: max number of forms to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Forms retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              example:
+                message: Forms retrieved succesfully
+                payload:
+                  data:
+                  - id: 1
+                    name: New form
+                    description: "null,"
+                    createdAt: 2024-09-18T21:03:14.473Z
+                    updatedAt: 2024-09-18T15:19:21.000Z
+                    createdBy:
+                      id: 1
+                      username: admin
+                    updatedBy:
+                      id: 1
+                      username: admin
+                  - id: 2
+                    name: New form 2
+                    description: "null,"
+                    createdAt: 2024-09-18T21:03:21.020Z
+                    updatedAt: 2024-09-18T17:55:29.000Z
+                    createdBy:
+                      id: 1
+                      username: admin
+                    updatedBy:
+                      id: 1
+                      username: admin
+                  total: 3
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Forms
+      operationId: createForm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/form_body'
+            example:
+              name: New form
+              description: This is a new form
+        required: true
+      responses:
+        "200":
+          description: Form created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              example:
+                message: Form created succesfully
+                payload:
+                  id: 1
+                  name: New form
+                  description: This is a new form
+                  createdAt: 2024-09-18T21:03:14.473Z
+                  updatedAt: 2024-09-18T15:19:21.000Z
+                  createdBy: 1
+                  updatedBy: 1
+      security:
+      - bearerAuth: []
+  /form/{id}:
+    get:
+      tags:
+      - Forms
+      description: retrieves a form
+      operationId: getForm
+      parameters:
+      - name: id
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+              example:
+                message: Forms retrieved succesfully
+                payload:
+                  id: 1
+                  name: New form
+                  description: This is a new form
+                  createdAt: 2024-09-18T21:03:14.473Z
+                  updatedAt: 2024-09-18T15:19:21.000Z
+    delete:
+      tags:
+      - Forms
+      description: deletes a form
+      operationId: deleteForm
+      parameters:
+      - name: id
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              example:
+                message: Form deleted succesfully
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Forms
+      description: updates a form
+      operationId: updateForm
+      parameters:
+      - name: id
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/form_id_body'
+            example:
+              name: New form updated
+              description: This is a new form but updated
+        required: true
+      responses:
+        "200":
+          description: Form updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              example:
+                message: Form updated succesfully
+      security:
+      - bearerAuth: []
+  /form-item/{formId}:
+    get:
+      tags:
+      - FormItems
+      description: retrieves the items of a form
+      operationId: getFormItems
+      parameters:
+      - name: formId
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form items retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+              example:
+                message: Form items retrieved successfully
+                payload:
+                  data:
+                  - id: 1
+                    name: <p>Q1</p>
+                    required: false
+                    type: text
+                    options: ""
+                    order: 1
+                  - id: 2
+                    name: <p>Q2</p>
+                    type: number
+                    options: ""
+                    order: 2
+    post:
+      tags:
+      - FormItems
+      operationId: createFormItem
+      parameters:
+      - name: formId
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/formitem_formId_body'
+            example:
+              name: <p>Question 2</p>
+              required: false
+              type: text
+              options: ""
+              order: 2
+        required: true
+      responses:
+        "200":
+          description: Form item created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+              example:
+                message: Form item created succesfully
+                payload:
+                  id: 1
+                  name: <p>Q1</p>
+                  required: false
+                  type: text
+                  options: ""
+                  order: 1
+      security:
+      - bearerAuth: []
+  /form-item/{id}:
+    get:
+      tags:
+      - FormItems
+      description: retrieves a form item
+      operationId: getFormItem
+      parameters:
+      - name: id
+        in: path
+        description: form item id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form item retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+              example:
+                message: Form item retrieved successfully
+                payload:
+                  id: 1
+                  name: New form
+                  description: This is a new form
+                  createdAt: 2024-09-18T21:03:14.473Z
+                  updatedAt: 2024-09-18T15:19:21.000Z
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - FormItems
+      description: deletes a form item
+      operationId: deleteFormItem
+      parameters:
+      - name: id
+        in: path
+        description: form item id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form item deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              example:
+                message: Form item deleted succesfully
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - FormItems
+      description: updates a form item
+      operationId: updateFormItem
+      parameters:
+      - name: id
+        in: path
+        description: form item id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/formitem_id_body'
+            example:
+              name: <p>Question 1</p>
+              required: true
+              type: number
+              options: ""
+              order: 1
+        required: true
+      responses:
+        "200":
+          description: Form item updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+              example:
+                message: Form item updated succesfully
+                payload:
+                  id: 1
+                  name: <p>Question 1</p>
+                  required: true
+                  type: number
+                  options: ""
+                  order: 1
+      security:
+      - bearerAuth: []
+  /form-response:
+    get:
+      tags:
+      - FormResponses
+      description: retrieves paginated form responses
+      operationId: getFormResponses
+      parameters:
+      - name: page
+        in: query
+        description: number of the page to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page_size
+        in: query
+        description: max number of forms to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: form_id
+        in: query
+        description: form id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form responses retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+              example:
+                message: Form responses retrieved successfully
+                payload:
+                  data:
+                  - id: 1
+                    createdAt: 2024-09-18T21:19:59.903Z
+                    form:
+                      id: 1
+                      name: New form 1
+                      createdAt: 2024-09-18T21:03:14.473Z
+                      updatedAt: 2024-09-18T15:19:21.000Z
+                  - id: 2
+                    createdAt: 2024-09-18T21:19:59.903Z
+                    form:
+                      id: 2
+                      name: New form 2
+                      createdAt: 2024-09-18T21:03:21.020Z
+                      updatedAt: 2024-09-18T17:55:29.000Z
+                  total: 2
+      security:
+      - bearerAuth: []
+  /form-response/{formId}:
+    post:
+      tags:
+      - FormResponses
+      operationId: createFormResponse
+      parameters:
+      - name: formId
+        in: path
+        description: form id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FormResponseItemCreate'
+            example:
+            - id: 1
+              value: "Yes"
+            - id: 2
+              value: "3897.59"
+            - id: 3
+              value:
+              - 9
+              - 7
+              - 5
+        required: true
+      responses:
+        "200":
+          description: Form response created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+              example:
+                message: Form response created successfully
+  /form-response/{id}:
+    get:
+      tags:
+      - FormResponses
+      description: retrieves a form response
+      operationId: getFormResponse
+      parameters:
+      - name: id
+        in: path
+        description: form response id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Form response retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_8'
+              example:
+                message: Form response retrieved successfully
+                payload:
+                - id: 2
+                  createdAt: 2024-09-18T23:55:45.450Z
+                  responseItem:
+                  - id: 3
+                    value:
+                    - 1 2 3 4
+                    item:
+                      id: 3
+                      name: <p>Question 1</p>
+                      required: "false,"
+                      type: multiple
+                      options: |-
+                        1
+                        2
+                        3
+                        4
+                        5
+                      order: 1
+                  form:
+                    id: 2
+                    name: New form 2
+                    createdAt: 2024-09-18T21:03:21.020Z
+                    updatedAt: 2024-09-18T17:55:29.000Z
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        username:
+          type: string
+    PaginatedForms:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Form'
+        total:
+          type: integer
+          format: int32
+    FormCreated:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        createdBy:
+          type: integer
+          format: int32
+        updatedBy:
+          type: integer
+          format: int32
+    Form:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        createdBy:
+          allOf:
+          - type: object
+          - $ref: '#/components/schemas/User'
+        updatedBy:
+          allOf:
+          - type: object
+          - $ref: '#/components/schemas/User'
+    PaginatedFormResponses:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormResponse'
+        total:
+          type: integer
+          format: int32
+    FormResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date
+        form:
+          allOf:
+          - type: object
+          - nullable: true
+          - $ref: '#/components/schemas/Form'
+        responseItems:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FormResponseItem'
+    FormItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        required:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - text
+          - number
+          - single
+          - multiple
+          - date
+        options:
+          type: string
+          nullable: true
+        order:
+          type: integer
+          format: int32
+    FormResponseItemCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        value:
+          type: object
+          nullable: true
+    FormResponseItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        value:
+          type: object
+          nullable: true
+        item:
+          allOf:
+          - type: object
+          - $ref: '#/components/schemas/FormItem'
+    auth_login_body:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_payload'
+    inline_response_200_1:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_1_payload'
+    form_body:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    inline_response_200_2:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_2_payload'
+    inline_response_200_3:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_3_payload'
+    inline_response_200_4:
+      type: object
+      properties:
+        message:
+          type: string
+    form_id_body:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    inline_response_200_5:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormItem'
+    formitem_formId_body:
+      type: object
+      properties:
+        name:
+          type: string
+        required:
+          type: boolean
+          nullable: true
+        type:
+          type: string
+          enum:
+          - text
+          - number
+          - date
+          - simple
+          - multiple
+        options:
+          type: string
+          nullable: true
+        order:
+          type: integer
+          format: int32
+    inline_response_200_6:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_6_payload'
+    formitem_id_body:
+      type: object
+      properties:
+        name:
+          type: string
+        required:
+          type: boolean
+          nullable: true
+        type:
+          type: string
+          enum:
+          - text
+          - number
+          - date
+          - simple
+          - multiple
+        options:
+          type: string
+          nullable: true
+        order:
+          type: integer
+          format: int32
+    inline_response_200_7:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_7_payload'
+    inline_response_200_8:
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          $ref: '#/components/schemas/inline_response_200_8_payload'
+    inline_response_200_payload:
+      type: object
+      properties:
+        access_token:
+          type: string
+    inline_response_200_1_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/PaginatedForms'
+    inline_response_200_2_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/FormCreated'
+    inline_response_200_3_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/Form'
+    inline_response_200_6_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/FormItem'
+    inline_response_200_7_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/PaginatedFormResponses'
+    inline_response_200_8_payload:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/FormResponse'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

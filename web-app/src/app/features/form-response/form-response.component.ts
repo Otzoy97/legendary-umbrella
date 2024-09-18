@@ -31,6 +31,7 @@ export class FormResponseComponent implements OnInit {
           severity: 'error',
           detail: err.error.message || 'An error occurred while loading the form'
         });
+        this.router.navigate(['/notfound']);
       }
     });
   }

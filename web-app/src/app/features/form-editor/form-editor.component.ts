@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { FormService } from '../form/services/form.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FormShareComponent } from '../../shared/components/form-share/form-share.component';
 
 @Component({
   selector: 'app-formEditor',
@@ -13,16 +15,18 @@ export class FormEditorComponent implements OnInit, OnDestroy {
   private formId: string;
   public form: any;
   public loading: boolean = false;
-  public shareVisible: boolean = false;
   public formStatus: string = 'saved';
   public linkForm: string;
+  private shareDialog: DynamicDialogRef<FormShareComponent>;
   private subs: Subscription = new Subscription();
+
 
   constructor(
     private readonly messageService: MessageService,
     private readonly formService: FormService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly dialogService: DialogService,
   ) {
     this.formId = route.snapshot.paramMap.get('id');
     const baseUrl = window.location.origin;
@@ -35,16 +39,20 @@ export class FormEditorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+    if (this.shareDialog) {
+      this.shareDialog.destroy();
+    }
   }
 
-  copyInputMessage(inputElement) {
-    inputElement.select();
-    document.execCommand('copy');
-    inputElement.setSelectionRange(0, 0);
-  }
-
-  public showShare(): void {
-    this.shareVisible = true;
+  showShare(): void {
+    this.shareDialog = this.dialogService.open(FormShareComponent, {
+      header: 'Share form',
+      width: '50%',
+      position: 'top',
+      data: {
+        formId: this.formId
+      }
+    });
   }
 
   private getForm(): void {
@@ -57,6 +65,7 @@ export class FormEditorComponent implements OnInit, OnDestroy {
             severity: 'error',
             detail: err.error.message || 'Error loading form'
           });
+          this.router.navigate(['/notfound']);
         }
       })
     );

@@ -7,6 +7,7 @@ import { LoadService } from '../../../../core/services/load.service';
 import { FormService } from '../../services/form.service';
 import { FormUpdateComponent } from '../form-update/form-update.component';
 import { Form } from '../../../../shared/interfaces/form.interface';
+import { FormShareComponent } from '../../../../shared/components/form-share/form-share.component';
 
 @Component({
   selector: 'app-formIndexTableMenu',
@@ -18,6 +19,7 @@ export class FormIndexTableMenuComponent implements OnDestroy {
   public menuItems$: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
   private subs: Subscription = new Subscription();
   private updateDialog: DynamicDialogRef<FormUpdateComponent>;
+  private shareDialog: DynamicDialogRef<FormShareComponent>;
 
   constructor(
     private readonly router: Router,
@@ -32,6 +34,9 @@ export class FormIndexTableMenuComponent implements OnDestroy {
     this.subs.unsubscribe();
     if (this.updateDialog) {
       this.updateDialog.destroy();
+    }
+    if (this.shareDialog) {
+      this.shareDialog.destroy();
     }
   }
 
@@ -53,12 +58,28 @@ export class FormIndexTableMenuComponent implements OnDestroy {
         command: () => this.router.navigate(['forms/' + form.id + '/responses'])
       },
       {
+        label: 'Share form',
+        icon: 'pi pi-share-alt',
+        command: () => this.showShare(form)
+      },
+      {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => this.confirmDelete(form)
       }
     ];
     this.menuItems$.next(items);
+  }
+
+  showShare(form: Form): void {
+    this.shareDialog = this.dialogService.open(FormShareComponent, {
+      header: 'Share form',
+      width: '50%',
+      position: 'top',
+      data: {
+        formId: form.id
+      }
+    });
   }
 
   private edit(form: any): void {

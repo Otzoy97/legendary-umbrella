@@ -11,7 +11,7 @@ export class FormResponseController {
   async create(
     @Param('formId') formId: string,
     @Body() createFormResponseDto: CreateFormResponseDto) {
-    return this.formResponseService.create(+formId, createFormResponseDto);
+    return await this.formResponseService.create(+formId, createFormResponseDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -22,9 +22,9 @@ export class FormResponseController {
     @Query('form_id') formId: number,
   ) {
     const query = {
-      page: page ?? 1,
-      pageSize: pageSize ?? 10,
-      formId: formId ?? null
+      page: page || 1,
+      pageSize: pageSize || 10,
+      formId: formId || null
     }
     return await this.formResponseService.findAll(query);
   }

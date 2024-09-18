@@ -28,7 +28,7 @@ export class Form {
 
     @ManyToOne(() => User)
     createdBy: User;
-    
+
     @ManyToOne(() => User)
     updatedBy: User;
 }

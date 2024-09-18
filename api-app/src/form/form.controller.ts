@@ -26,8 +26,8 @@ export class FormController {
     @Query('page_size') pageSize: number,
   ) {
     const query = {
-      page: page ?? 1,
-      pageSize: pageSize ?? 10
+      page: page || 1,
+      pageSize: pageSize || 10
     }
     return await this.formService.findAll(query);
   }

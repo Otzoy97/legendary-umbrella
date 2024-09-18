@@ -10,6 +10,7 @@ import { FormResponseModule } from './form-response/form-response.module';
 import { Form } from './form/entities/form.entity';
 import { FormModule } from './form/form.module';
 import { User } from './user/entities/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { User } from './user/entities/user.entity';
     FormModule,
     FormItemModule,
     FormResponseModule,
+    UserModule,
     AuthModule
   ],
 })
-export class AppModule { }
+export class AppModule {}

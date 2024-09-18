@@ -11,17 +11,9 @@ export class FormResponseItem {
   @Column({ type: 'simple-json', nullable: true })
   value: any;
 
-  @ManyToOne(() => FormResponse, formResponse => formResponse.responseItems, {
-    nullable: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => FormResponse, formResponse => formResponse.responseItems, { nullable: false })
   formResponse: FormResponse;
 
-  @ManyToOne(() => FormItem, formItem => formItem.responseItems, {
-    nullable: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => FormItem, formItem => formItem.responseItems, { nullable: false })
   item: FormItem;
 }

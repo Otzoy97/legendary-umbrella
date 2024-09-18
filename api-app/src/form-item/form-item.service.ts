@@ -45,6 +45,7 @@ export class FormItemService {
         order: maxOrder + 1
       });
       const persistedNewItem = await manager.save(newItem);
+      console.log(persistedNewItem);
       return response('Form item created successfully', persistedNewItem);
     });
   }

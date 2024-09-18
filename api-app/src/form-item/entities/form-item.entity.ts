@@ -20,16 +20,12 @@ export class FormItem {
   @Column({ type: 'text', nullable: true })
   options: string;
 
-  @ManyToOne(() => Form, form => form.items, {
-    nullable: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => Form, form => form.items)
   form: Form;
 
   @Column({ type: 'int' })
   order: number;
 
-  @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.item)
+  @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.item, { cascade: true, onDelete: 'CASCADE' })
   responseItems: FormResponseItem[];
 }

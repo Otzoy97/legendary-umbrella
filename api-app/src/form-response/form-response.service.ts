@@ -77,7 +77,6 @@ export class FormResponseService {
       data: formResponses,
       total
     };
-
     return response('Form responses retrieved successfully', payload);
   }
 
@@ -100,7 +99,7 @@ export class FormResponseService {
     });
     if (!formResponse) {
       throw new NotFoundException('Form response not found');
-    }
+    };
     return response('Form response retrieved successfully', formResponse);
   }
 }

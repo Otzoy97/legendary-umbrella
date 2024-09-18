@@ -8,14 +8,10 @@ export class FormResponse {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Form, form => form.responses, {
-    nullable: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => Form, form => form.responses, { nullable: false })
   form: Form;
 
-  @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.formResponse)
+  @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.formResponse, { cascade: true, onDelete: 'CASCADE' })
   responseItems: FormResponseItem[];
 
   @CreateDateColumn({ type: 'datetime' })

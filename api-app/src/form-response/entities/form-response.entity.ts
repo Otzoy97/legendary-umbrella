@@ -5,15 +5,19 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 
 @Entity()
 export class FormResponse {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Form, form => form.responses)
-    form: Form;
+  @ManyToOne(() => Form, form => form.responses, {
+    nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE'
+  })
+  form: Form;
 
-    @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.formResponse)
-    responseItems: FormResponseItem[];
-    
-    @CreateDateColumn({ type: 'datetime' })
-    createdAt: Date;
+  @OneToMany(() => FormResponseItem, formResponseItem => formResponseItem.formResponse)
+  responseItems: FormResponseItem[];
+
+  @CreateDateColumn({ type: 'datetime' })
+  createdAt: Date;
 }

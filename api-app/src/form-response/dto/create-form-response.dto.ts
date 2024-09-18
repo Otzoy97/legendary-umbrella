@@ -7,7 +7,6 @@ class FormResponseItemDto {
   @IsNotEmpty()
   id: number;
 
-  @IsString()
   @IsOptional()
   value: string;
 }

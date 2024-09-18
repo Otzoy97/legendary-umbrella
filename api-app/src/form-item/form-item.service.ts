@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFormItemDto } from './dto/create-form-item.dto';
 import { UpdateFormItemDto } from './dto/update-form-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { FormItem } from './entities/form-item.entity';
 import { Form } from 'src/form/entities/form.entity';
 import { response } from 'src/response/response';
@@ -14,7 +14,8 @@ export class FormItemService {
     @InjectRepository(FormItem)
     private readonly formItemRepository: Repository<FormItem>,
     @InjectRepository(Form)
-    private readonly formRepository: Repository<Form>
+    private readonly formRepository: Repository<Form>,
+    private readonly entityManager: EntityManager
   ) { }
 
   /**
@@ -33,7 +34,7 @@ export class FormItemService {
       ? Math.max(...form.items.map(item => item.order))
       : 0;
 
-    return await this.formItemRepository.manager.transaction(async (manager) => {
+    return await this.entityManager.transaction(async (manager) => {
       form.updatedBy = user.userId;
       form.updatedAt = new Date();
       await manager.save(form);
@@ -43,8 +44,8 @@ export class FormItemService {
         form: { id: formId },
         order: maxOrder + 1
       });
-      await manager.save(newItem);
-      return response('Form item created successfully', newItem);
+      const persistedNewItem = await manager.save(newItem);
+      return response('Form item created successfully', persistedNewItem);
     });
   }
 
@@ -91,30 +92,25 @@ export class FormItemService {
     // Retrieve form item
     const formItem = await this.formItemRepository.findOne({
       where: { id },
-      relations: ['form']
+      relations: ['form'],
+      select: { id: true, order: true, form: { id: true } }
     });
     if (!formItem) {
       throw new NotFoundException('Form item not found');
     }
     // Retrieve form
-    const form = await this.formRepository.findOne({ where: { id: formItem.form.id }, relations: ['items'] });
+    const form = await this.formRepository.findOne({ where: { id: formItem.form.id }, relations: ['items'], select: { id: true, items: true } });
     if (!form) {
       throw new NotFoundException('Form not found');
     }
 
-    // Update form item
-    Object.assign(formItem, updateFormItemDto);
-    // Update other items order
-    form.items.forEach((item) => {
-      if (item.order >= updateFormItemDto.order && item.id !== formItem.id) {
-        item.order += 1;
-      }
-    });
-    // Update form
-    form.updatedBy = user.userId;
-    form.updatedAt = new Date();
-    return await this.formItemRepository.manager.transaction(async (manager) => {
-      await manager.save(form.items);
+    return await this.entityManager.transaction(async (manager) => {
+      // Update form
+      form.updatedBy = user.userId;
+      form.updatedAt = new Date();
+      await manager.save(form);
+      // Update form item
+      Object.assign(formItem, updateFormItemDto);
       await manager.save(formItem);
       return response('Form item updated successfully', formItem);
     });

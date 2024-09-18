@@ -11,7 +11,7 @@ export class Form {
     @Column({ type: 'varchar', nullable: false })
     name: string;
 
-    @Column({ type: 'text', default: "" })
+    @Column({ type: 'text', nullable: true })
     description: string;
 
     @OneToMany(() => FormItem, formItem => formItem.form, { cascade: true, onDelete: 'CASCADE' })

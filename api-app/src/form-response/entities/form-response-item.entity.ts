@@ -8,8 +8,8 @@ export class FormResponseItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'nvarchar', nullable: true })
-  value: string;
+  @Column({ type: 'simple-json', nullable: true })
+  value: any;
 
   @ManyToOne(() => FormResponse, formResponse => formResponse.responseItems, {
     nullable: false,

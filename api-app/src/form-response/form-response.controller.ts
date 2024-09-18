@@ -19,7 +19,7 @@ export class FormResponseController {
   async findAll(
     @Query('page') page: number,
     @Query('page_size') pageSize: number,
-    @Query('formId') formId: number,
+    @Query('form_id') formId: number,
   ) {
     const query = {
       page: page ?? 1,

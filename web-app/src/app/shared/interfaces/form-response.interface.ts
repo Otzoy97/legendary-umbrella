@@ -9,7 +9,7 @@ export interface FormResponse {
 }
 
 export interface FormResponseItem {
-  value: string;
+  value: any;
   formResponse?: FormResponse;
   item?: FormItem
 }

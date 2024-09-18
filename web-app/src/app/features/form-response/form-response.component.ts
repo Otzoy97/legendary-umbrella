@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormService } from '../form/services/form.service';
 import { Form } from '../../shared/interfaces/form.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -16,7 +16,8 @@ export class FormResponseComponent implements OnInit {
   constructor(
     private readonly formService: FormService,
     private readonly messageService: MessageService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,5 +33,9 @@ export class FormResponseComponent implements OnInit {
         });
       }
     });
+  }
+
+  exit(): void {
+    this.router.navigate(['forms']);
   }
 }

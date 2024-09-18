@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -12,9 +12,11 @@ import { PaginatorState } from 'primeng/paginator';
 })
 export class FormResponseIndexTableComponent implements OnInit {
 
+  @Input() formId!: string;
   public loading: boolean = true;
   public totalRecords: number = 0;
   public forms: any[] = [];
+  
 
   constructor(
     private readonly formResponseService: FormResponseService,
@@ -34,6 +36,7 @@ export class FormResponseIndexTableComponent implements OnInit {
     const queryParams = {
       page: (first / rows) + 1,
       page_size: rows,
+      form_id: this.formId
     }
 
     this.formResponseService.index(queryParams).subscribe({

@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { FormService } from '../form/services/form.service';
-import { BreadcrumbService } from '../../core/components/breadcrumb/breadcrumb.service';
 
 @Component({
   selector: 'app-formEditor',
@@ -20,7 +19,6 @@ export class FormEditorComponent implements OnInit, OnDestroy {
   private subs: Subscription = new Subscription();
 
   constructor(
-    private readonly breadcrumbService: BreadcrumbService,
     private readonly messageService: MessageService,
     private readonly formService: FormService,
     private readonly router: Router,
@@ -32,11 +30,6 @@ export class FormEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.breadcrumbService.setItems([
-      { label: 'Forms', routerLink: '/forms' },
-      { label: 'Form Editor' }
-    ]);
-
     this.getForm();
   }
 

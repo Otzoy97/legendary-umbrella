@@ -48,6 +48,11 @@ export class FormIndexTableMenuComponent implements OnDestroy {
         command: () => this.update(form)
       },
       {
+        label: 'View responses',
+        icon: 'pi pi-eye',
+        command: () => this.router.navigate(['forms/' + form.id + '/responses'])
+      },
+      {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => this.confirmDelete(form)

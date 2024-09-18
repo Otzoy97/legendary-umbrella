@@ -6,7 +6,7 @@
       <div class="flex justify-content-center">
         <strong>Answers</strong>
       </div>
-      <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="1" [totalRecords]="totalRecords">
+      <p-paginator [showCurrentPageReport]="true" (onPageChange)="onPageChange($event)" [first]="0" [rows]="1" [totalRecords]="totalRecords">
       </p-paginator>
     </p-card>
   </div>

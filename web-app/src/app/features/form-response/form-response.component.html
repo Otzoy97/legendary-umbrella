@@ -11,9 +11,12 @@
     <div class="grid" *ngIf="form.description">
       <hr>
       <div class="col">
-        <p>{{form.description}}</p>
+        <p>{{form.description || ''}}</p>
       </div>
     </div>
+    <div class="flex justify-content-end">
+      <button pButton pRipple class="p-button-help" icon="pi pi-arrow-left" type="button" label="Back" (click)="exit()"></button>
+    </div>
   </p-card>
-  <app-formResponseIndexTable></app-formResponseIndexTable>
+  <app-formResponseIndexTable [formId]="form.id+''"></app-formResponseIndexTable>
 </ng-container>

@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormItemService } from '../../services/form-item.service';
+import { FormItem } from '../../../../shared/interfaces/form-item.interface';
 
 @Component({
   selector: 'app-formEditorControList',
@@ -10,7 +11,7 @@ import { FormItemService } from '../../services/form-item.service';
 export class FormEditorControlListComponent implements OnInit {
 
   public formId: string;
-  public formItems: any[] = [];
+  public formItems: FormItem[] = [];
   public loading: boolean = true;
 
   constructor(
@@ -47,6 +48,10 @@ export class FormEditorControlListComponent implements OnInit {
     this.formItemService.create(this.formId, data).subscribe({
       next: (res) => {
         this.formItems.push(res.payload);
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Form saved'
+        })
       }, error: (err) => {
         this.messageService.add({
           severity: 'error',
@@ -60,6 +65,10 @@ export class FormEditorControlListComponent implements OnInit {
     this.formItemService.delete(id).subscribe({
       next: (_) => {
         this.formItems = this.formItems.filter(item => item.id !== id);
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Form saved'
+        })
       }, error: (err) => {
         this.messageService.add({
           severity: 'error',
@@ -68,41 +77,4 @@ export class FormEditorControlListComponent implements OnInit {
       }
     });
   }
-
-  moveItemDown(index: number): void {
-    const item = this.formItems[index];
-    if (index < this.formItems.length - 1) {
-      return;
-    }
-    this.formItemService.update(item.id, { order: item.order + 1 }).subscribe({
-      next: (_) => {
-        // Swap order with next item
-        [this.formItems[index], this.formItems[index + 1]] = [this.formItems[index + 1], this.formItems[index]];
-      }, error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          detail: err.error.message || 'Error moving item'
-        });
-      }
-    });
-  }
-
-  moveItemUp(index: number): void {
-    const item = this.formItems[index];
-    if (index > 0) {
-      return;
-    }
-    this.formItemService.update(item.id, { order: item.order - 1 }).subscribe({
-      next: (_) => {
-        // Swap order with previous item
-        [this.formItems[index], this.formItems[index - 1]] = [this.formItems[index - 1], this.formItems[index]];
-      }, error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          detail: err.error.message || 'Error moving item'
-        });
-      }
-    });
-  }
-
 }

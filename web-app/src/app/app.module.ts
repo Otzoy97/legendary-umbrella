@@ -60,8 +60,6 @@ import { TopbarComponent } from './core/components/topbar/topbar.component';
 import { MenuService } from './core/components/menu/menu.service';
 import { MenuComponent } from './core/components/menu/menu.component';
 import { MenuItemComponent } from './core/components/menuitem/menuitem.component';
-import { BreadcrumbComponent } from './core/components/breadcrumb/breadcrumb.component';
-import { BreadcrumbService } from './core/components/breadcrumb/breadcrumb.service';
 
 @NgModule({
   imports: [
@@ -103,7 +101,6 @@ import { BreadcrumbService } from './core/components/breadcrumb/breadcrumb.servi
     MainComponent,
     MenuComponent,
     MenuItemComponent,
-    BreadcrumbComponent,
     NotfoundComponent,
 
     AuthComponent,
@@ -137,7 +134,6 @@ import { BreadcrumbService } from './core/components/breadcrumb/breadcrumb.servi
     ConfirmationService,
     DialogService,
     MenuService,
-    BreadcrumbService
   ],
   bootstrap: [AppComponent]
 })

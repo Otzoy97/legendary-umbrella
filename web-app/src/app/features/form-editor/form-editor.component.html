@@ -1,5 +1,5 @@
 <p-card styleClass="mt-2" *ngIf="form" header="{{form.name}}">
-  <p>{{form.description}}</p>
+  <p>{{form.description || ''}}</p>
   <div class="flex flex-column align-content-center gap-2 md:flex-row md:justify-content-end">
     <button pButton pRipple type="button" label="Share" (click)="showShare()" class="p-button-info "></button>
     <button pButton pRipple type="button" label="Exit" (click)="exitForm()" class="p-button-danger "></button>

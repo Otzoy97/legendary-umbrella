@@ -50,6 +50,7 @@ export class FormEditorControlComponent implements OnInit, OnDestroy {
       required: this.formItem.required || false,
       type: this.formItem.type || ItemType.TEXT,
       options: this.formItem.options || '',
+      order: this.formItem.order,
     });
 
     this.subs.add(

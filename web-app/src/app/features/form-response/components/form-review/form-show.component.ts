@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormItem } from '../../../../shared/interfaces/form-item.interface';
 import { FormResponseService } from '../../services/form-response.service';
+import { FormItemService } from '../../../form-editor/services/form-item.service';
 
 @Component({
   selector: 'app-formResponseReview',
@@ -12,6 +13,7 @@ import { FormResponseService } from '../../services/form-response.service';
 export class FormResponseReviewComponent implements OnInit {
 
   @Input() public formResponseId!: string;
+  public formId!: string;
   public formItems: FormItem[];
   public formGroup: FormGroup;
   public loadingPage: boolean = true;
@@ -19,27 +21,49 @@ export class FormResponseReviewComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly formResponseService: FormResponseService,
+    private readonly formItemService: FormItemService,
     private readonly messageService: MessageService,
     public readonly router: Router,
-  ) { }
+    public readonly route: ActivatedRoute
+  ) {
+    this.formId = route.snapshot.paramMap.get('id');
+  }
 
   ngOnInit(): void {
+    this.loadItems();
     this.loadReponses();
+  }
+
+  private loadItems(): void {
+    this.formItemService.index(this.formId).subscribe({
+      next: (res) => {
+        this.formItems = res.payload;
+        const formControls = {};
+        this.formItems.forEach((formItem) => {
+          formControls[formItem.id] = new FormControl();
+        });
+        this.formGroup = this.formBuilder.group(formControls);
+        this.formGroup.disable();
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          detail: err.error.message || 'An error occurred'
+        });
+      }
+    });
   }
 
   private loadReponses(): void {
     this.formResponseService.show(this.formResponseId).subscribe({
       next: (res) => {
-        // Extract the items from the responseItems
-        this.formItems = res.payload.responseItems.map((responseItem) => {
-          return responseItem.item;
-        });
-        const formControls = {};
+        // Set the values of the form controls
         res.payload.responseItems.forEach((responseItem) => {
-          formControls[responseItem.item.id] = new FormControl(responseItem.value);
+          if (responseItem.item.type === 'date') {
+            responseItem.value = new Date(responseItem.value);
+          }
+          this.formGroup.get(responseItem.item.id + '').setValue(responseItem.value);
         });
-        this.formGroup = this.formBuilder.group(formControls);
-        this.formGroup.disable();
       },
       error: (err) => {
         this.messageService.add({

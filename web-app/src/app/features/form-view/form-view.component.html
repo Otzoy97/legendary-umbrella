@@ -12,7 +12,7 @@
     <div class="grid" *ngIf="form.description">
       <hr>
       <div class="col">
-        <p>{{form.description}}</p>
+        <p>{{form.description || ''}}</p>
       </div>
     </div>
   </p-card>
@@ -53,7 +53,7 @@
     <div class="grid" *ngIf="form.description">
       <hr>
       <div class="col">
-        <p>{{form.description}}</p>
+        <p>{{form.description || ''}}</p>
       </div>
     </div>
   </p-card>

@@ -10,7 +10,6 @@ export enum FormItemType {
 
 export class CreateFormItemDto {
   @IsString()
-  @IsNotEmpty()
   @MaxLength(255)
   name: string;
 
@@ -26,5 +25,6 @@ export class CreateFormItemDto {
 
   @IsNumber()
   @Min(1)
+  @IsOptional()
   order: number;
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { FormService } from '../../services/form-service.service';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'app-form-update',
@@ -45,13 +45,11 @@ export class FormUpdateComponent implements OnInit {
     }
     this.formService.update(this.id_form, this.formDetails.value).subscribe({
       next: (res) => {
-        if (res.ok) {
-          this.messageService.add({
-            severity: 'success',
-            detail: 'Form updated successfully'
-          });
-          this.ref.close(this.formDetails.value);
-        }
+        this.messageService.add({
+          severity: 'success',
+          detail: res.message || 'Form updated successfully'
+        });
+        this.ref.close(this.formDetails.value);
       },
       error: (err) => {
         this.messageService.add({

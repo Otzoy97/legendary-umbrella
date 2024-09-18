@@ -1,0 +1,18 @@
+<div *ngIf="loadingPage" class="flex justify-content-center align-items-center">
+  <p-progressSpinner strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+</div>
+<ng-container *ngIf="!loadingPage">
+  <form [formGroup]="formGroup">
+    <ng-container *ngFor="let item of formItems">
+      <div class="grid my-2">
+        <div class="col">
+          <p-card styleClass="mt-2">
+            <ng-template pTemplate="content">
+              <app-formControl [control]="control(item.id)" [formItem]="item"></app-formControl>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</ng-container>

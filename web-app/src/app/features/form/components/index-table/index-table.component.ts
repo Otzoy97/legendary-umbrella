@@ -1,15 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { TableColumn } from '../../../../core/interfaces/table-column';
-import { FormService } from '../../services/form-service.service';
+import { TableColumn } from '../../../../shared/interfaces/table-column';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'app-formIndexTable',
   templateUrl: './index-table.component.html'
 })
 export class FormIndexTableComponent {
-  @ViewChild('table') table: Table;
 
   public cols: TableColumn[];
   public loading: boolean = true;
@@ -32,21 +31,17 @@ export class FormIndexTableComponent {
   index(event: TableLazyLoadEvent) {
     let rows = event.rows;
     let first = event.first;
-    let sortField = event.sortField;
-    let sortOrder = event.sortOrder;
     this.loading = true;
 
     const queryParams = {
       page: (first / rows) + 1,
-      pageSize: rows,
+      page_size: rows,
     }
 
     this.formService.index(queryParams).subscribe({
       next: (res) => {
-        if (res.ok) {
-          this.forms = res.body.payload.data;
-          this.totalRecords = res.body.payload.total;
-        }
+        this.forms = res.payload.data;
+        this.totalRecords = res.payload.total;
       },
       error: (err) => {
         this.messageService.add({
@@ -56,8 +51,6 @@ export class FormIndexTableComponent {
       },
       complete: () => this.loading = false
     })
-
-
   }
 
 }

@@ -1,1 +1,19 @@
-<p>form-response works!</p>
+<div *ngIf="loadingPage" class="flex justify-content-center align-items-center">
+  <p-progressSpinner strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+</div>
+<ng-container *ngIf="!loadingPage">
+  <p-card>
+    <div class="grid">
+      <div class="col">
+        <h2>{{form.name}}</h2>
+      </div>
+    </div>
+    <div class="grid" *ngIf="form.description">
+      <hr>
+      <div class="col">
+        <p>{{form.description}}</p>
+      </div>
+    </div>
+  </p-card>
+  <app-formResponseIndexTable></app-formResponseIndexTable>
+</ng-container>

@@ -3,6 +3,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { MenuService } from '../menu/menu.service';
 import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from '../../../app.component';
+import { AuthenticationService } from '../../../features/auth/services/authentication.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -24,13 +26,29 @@ export class MainComponent implements OnInit {
   menuClick: boolean;
   userMenuClick: boolean;
   topbarUserMenuActive: boolean;
+  innerTopBarVisible: boolean = true;
   menuActive: boolean;
   menuHoverActive: boolean;
   configDialogActive: boolean;
-  
-  constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig, public app: AppComponent) { }
+
+  constructor(
+    private menuService: MenuService,
+    private authSvc: AuthenticationService,
+    private primengConfig: PrimeNGConfig,
+    private route: ActivatedRoute,
+    private router: Router,
+    public app: AppComponent) {
+      // If url is view
+      const currentUrl = this.router.url;
+      const isFormView = currentUrl.includes('/form') && currentUrl.includes('/view');
+      this.innerTopBarVisible = !isFormView;
+  }
 
   ngOnInit(): void { }
+
+  isLogged(): boolean {
+    return this.authSvc.isLogged();
+  }
 
   blockBodyScroll(): void {
     if (document.body.classList) {

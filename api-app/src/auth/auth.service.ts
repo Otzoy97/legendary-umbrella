@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { LogInAuthDto } from './dto/signup-auth.dto';
 import { response } from 'src/response/response';
 
 @Injectable()

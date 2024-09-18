@@ -8,7 +8,7 @@ export class FormResponseController {
   constructor(private readonly formResponseService: FormResponseService) { }
 
   @Post(':formId')
-  create(
+  async create(
     @Param('formId') formId: string,
     @Body() createFormResponseDto: CreateFormResponseDto) {
     return this.formResponseService.create(+formId, createFormResponseDto);
@@ -16,25 +16,25 @@ export class FormResponseController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(
+  async findAll(
     @Query('page') page: number,
-    @Query('page-size') pageSize: number,
+    @Query('page_size') pageSize: number,
     @Query('formId') formId: number,
   ) {
     const query = {
-      page,
-      pageSize,
-      formId
+      page: page ?? 1,
+      pageSize: pageSize ?? 10,
+      formId: formId ?? null
     }
-    return this.formResponseService.findAll(query);
+    return await this.formResponseService.findAll(query);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':responseId')
-  findOne(
+  async findOne(
     @Param('responseId') responseId: string
   ) {
-    return this.formResponseService.findOne(+responseId);
+    return await this.formResponseService.findOne(+responseId);
   }
 
 }

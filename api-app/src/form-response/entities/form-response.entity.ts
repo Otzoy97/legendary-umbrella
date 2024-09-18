@@ -1,4 +1,4 @@
-import { FormResponseItem } from "src/form-response-item/entities/form-response-item.entity";
+import { FormResponseItem } from "src/form-response/entities/form-response-item.entity";
 import { Form } from "src/form/entities/form.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 

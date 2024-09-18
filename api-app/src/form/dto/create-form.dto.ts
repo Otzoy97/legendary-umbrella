@@ -6,5 +6,6 @@ export class CreateFormDto {
     @MaxLength(255)
     name: string;
 
+    @IsString()
     description: string;
 }

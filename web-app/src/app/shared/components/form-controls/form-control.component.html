@@ -1,0 +1,22 @@
+<div class="grid">
+  <quill-view [content]="formItem.name" class="col-12 md:col-6 lg:col-6">
+  </quill-view>
+  <ng-container [ngSwitch]="type">
+    <div *ngSwitchCase="'text'">
+      <app-formText [formItem]="formItem" [control]="control"></app-formText>
+    </div>
+    <div *ngSwitchCase="'number'">
+      <app-formNumber [formItem]="formItem" [control]="control"></app-formNumber>
+    </div>
+    <div *ngSwitchCase="'date'">
+      <app-formDate [formItem]="formItem" [control]="control"></app-formDate>
+    </div>
+    <div *ngSwitchCase="'single'">
+      <app-formSingle [formItem]="formItem" [control]="control"></app-formSingle>
+    </div>
+    <div *ngSwitchCase="'mutliple'">
+      <app-formMultiple [formItem]="formItem" [control]="control"></app-formMultiple>
+    </div>
+    <ng-container *ngSwitchDefault=""></ng-container>
+  </ng-container>
+</div>

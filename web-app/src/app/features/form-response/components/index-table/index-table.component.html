@@ -1,0 +1,17 @@
+
+
+<div class="grid my-2">
+  <div class="col">
+    <p-card class="p-0 m-0">
+      <div class="flex justify-content-center">
+        <strong>Answers</strong>
+      </div>
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="1" [totalRecords]="totalRecords">
+      </p-paginator>
+    </p-card>
+  </div>
+</div>
+<div *ngIf="loading" class="flex justify-content-center align-items-center">
+  <p-progressSpinner strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+</div>
+<app-formResponseReview *ngIf="!loading" [formResponseId]="forms[0].id"></app-formResponseReview>

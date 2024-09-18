@@ -11,46 +11,45 @@ export class FormController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(
+  async create(
     @Body() createFormDto: CreateFormDto,
     @Req() req: Request
   ) {
     const user = req.user;
-    return this.formService.create(createFormDto, user);
+    return await this.formService.create(createFormDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(
+  async findAll(
     @Query('page') page: number,
-    @Query('page-size') pageSize: number,
+    @Query('page_size') pageSize: number,
   ) {
     const query = {
-      page,
-      pageSize
+      page: page ?? 1,
+      pageSize: pageSize ?? 10
     }
-    return this.formService.findAll(query);
+    return await this.formService.findAll(query);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.formService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.formService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateFormDto: UpdateFormDto,
     @Req() req: Request) {
     const user = req.user;
-    return this.formService.update(+id, updateFormDto, user);
+    return await this.formService.update(+id, updateFormDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.formService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.formService.remove(+id);
   }
 }

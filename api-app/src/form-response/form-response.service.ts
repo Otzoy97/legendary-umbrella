@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FormResponseItem } from 'src/form-response-item/entities/form-response-item.entity';
+import { FormResponseItem } from './entities/form-response-item.entity';
 import { Form } from 'src/form/entities/form.entity';
 import { response } from 'src/response/response';
 import { Repository } from 'typeorm';
@@ -34,23 +34,19 @@ export class FormResponseService {
     return await this.formResponseRepository.manager.transaction(async (manager) => {
       // Create the form response
       const formResponse = this.formResponseRepository.create({
-        form
+        form: { id: formId }
       });
-      await manager.save(formResponse);
-      // Create the form response items
-      createFormResponseDto.items.forEach(async item => {
-        const formItem = form.items.find(i => i.uuid === item.formItemId);
-        if (!formItem) {
-          throw new NotFoundException('Form item not found');
-        }
-        const formResponseItem = this.formResponseItemRepository.create({
-          formResponse,
-          item: formItem,
+      const persistedResponse = await manager.save(formResponse);
+
+      const formResponseItems = createFormResponseDto.items.map(item => {
+        return this.formResponseItemRepository.create({
+          formResponse: persistedResponse,
+          item: { id: item.id },
           value: item.value
         });
-        await manager.save(formResponseItem);
       });
 
+      await manager.save(formResponseItems);
       return response('Form response created successfully');
     });
   }
@@ -61,8 +57,8 @@ export class FormResponseService {
    * @returns 
    */
   async findAll(query: any) {
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 10;
+    const page = query.page;
+    const pageSize = query.pageSize;
     const where: any = {};
 
     if (query.formId) {
@@ -72,15 +68,14 @@ export class FormResponseService {
     const options = {
       where,
       skip: (page - 1) * pageSize,
-      take: pageSize
+      take: pageSize,
+      relations: ['form']
     }
 
     const [formResponses, total] = await this.formResponseRepository.findAndCount(options);
     const payload = {
       data: formResponses,
-      total,
-      currentPage: page,
-      totalPages: Math.ceil(total / pageSize)
+      total
     };
 
     return response('Form responses retrieved successfully', payload);
@@ -92,7 +87,17 @@ export class FormResponseService {
    * @returns 
    */
   async findOne(responseId: number) {
-    const formResponse = await this.formResponseRepository.findOne({ where: { id: responseId }, relations: ['responseItems'] });
+    const formResponse = await this.formResponseRepository.findOne({
+      where: { id: responseId },
+      relations: ['responseItems', 'responseItems.item', 'form'],
+      order: {
+        responseItems: {
+          item: {
+            order: 'ASC'
+          }
+        }
+      }
+    });
     if (!formResponse) {
       throw new NotFoundException('Form response not found');
     }

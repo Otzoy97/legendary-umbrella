@@ -1,6 +1,6 @@
 <p-table #dt [autoLayout]="false" [rowHover]="true" responsiveLayout="scroll" styleClass="p-datatable-striped"
   [lazy]="true" [paginator]="true" [rows]="10" [value]="forms" [columns]="cols" [totalRecords]="totalRecords"
-  [loading]="loading" [loadingIcon]="'pi pi-spinner'" [rowsPerPageOptions]="[10,25,50]" [showCurrentPageReport]="true"
+  [loading]="loading" [loadingIcon]="'pi pi-spinner'" [rowsPerPageOptions]="[10,25,50]" 
   (onLazyLoad)="index($event)" dataKey="id">
   <ng-template pTemplate="header" let-columns>
     <tr>
@@ -12,13 +12,13 @@
   </ng-template>
   <ng-template pTemplate="body" let-form>
     <tr>
-      <td>{{form.nombre}}</td>
-      <td>{{form.created_at | date : 'medium'}}</td>
-      <td>{{form.updated_at | date : 'medium'}}</td>
-      <td></td>
-      <td></td>
+      <td>{{form.name}}</td>
+      <td>{{form.createdBy.username}}</td>
+      <td>{{form.updatedBy.username}}</td>
+      <td>{{form.createdAt | date : 'medium'}}</td>
+      <td>{{form.updatedAt | date : 'medium'}}</td>
       <td>
-        <app-formIndexTableMenu></app-formIndexTableMenu>
+        <app-formIndexTableMenu [form]="form"></app-formIndexTableMenu>
       </td>
     </tr>
   </ng-template>

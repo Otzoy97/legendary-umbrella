@@ -24,25 +24,28 @@ export class FormItemService {
    * @returns 
    */
   async create(formId: number, createFormItemDto: CreateFormItemDto, user: any) {
-    const form = await this.formRepository.findOne({ where: { id: formId } });
+    const form = await this.formRepository.findOne({ where: { id: formId }, relations: ['items'], select: { id: true, items: true } });
     if (!form) {
       throw new NotFoundException('Form not found');
     }
-    
-    const maxOrder = form.items.length > 0
+
+    const maxOrder = (form.items && (form.items.length > 0))
       ? Math.max(...form.items.map(item => item.order))
       : 0;
 
-    this.formItemRepository.create({
-      ...createFormItemDto,
-      form,
-      order: maxOrder + 1
+    return await this.formItemRepository.manager.transaction(async (manager) => {
+      form.updatedBy = user.userId;
+      form.updatedAt = new Date();
+      await manager.save(form);
+
+      const newItem = this.formItemRepository.create({
+        ...createFormItemDto,
+        form: { id: formId },
+        order: maxOrder + 1
+      });
+      await manager.save(newItem);
+      return response('Form item created successfully', newItem);
     });
-
-    form.updatedBy = user.userId;
-    this.formItemRepository.save(form);
-
-    return response('Form item created successfully');
   }
 
   /**
@@ -51,20 +54,27 @@ export class FormItemService {
    * @returns 
    */
   async findAll(formId: number) {
-    const form = await this.formRepository.findOne({ where: { id: formId } });
-    if (!form) {
+    const formItems = await this.formItemRepository.find({
+      where: {
+        form: { id: formId }
+      },
+      order: {
+        order: 'ASC'
+      }
+    });
+    if (!formItems) {
       throw new NotFoundException('Form not found');
     }
-    return response('Form items retrieved successfully', form.items);
+    return response('Form items retrieved successfully', formItems);
   }
 
   /**
-   * Retrieves form item by uuid
-   * @param uuid 
+   * Retrieves form item by id
+   * @param id 
    * @returns 
    */
-  async findOne(uuid: string) {
-    const formItem = await this.formItemRepository.findOne({ where: { uuid } });
+  async findOne(id: number) {
+    const formItem = await this.formItemRepository.findOne({ where: { id } });
     if (!formItem) {
       throw new NotFoundException('Form item not found');
     }
@@ -73,43 +83,69 @@ export class FormItemService {
 
   /**
    * Updates a form item
-   * @param uuid
+   * @param id
    * @param updateFormItemDto 
    * @returns 
    */
-  async update(uuid: string, updateFormItemDto: UpdateFormItemDto, user: any) {
+  async update(id: number, updateFormItemDto: UpdateFormItemDto, user: any) {
     // Retrieve form item
     const formItem = await this.formItemRepository.findOne({
-      where: { uuid },
+      where: { id },
       relations: ['form']
     });
     if (!formItem) {
       throw new NotFoundException('Form item not found');
     }
+    // Retrieve form
+    const form = await this.formRepository.findOne({ where: { id: formItem.form.id }, relations: ['items'] });
+    if (!form) {
+      throw new NotFoundException('Form not found');
+    }
 
-    // // Retrieve form
-    // const form = formItem.form;
     // Update form item
     Object.assign(formItem, updateFormItemDto);
-    // // Update other items order
-    // form.items.forEach((item) => {
-    //   if (item.order >= updateFormItemDto.order && item.uuid !== formItem.uuid) {
-    //     item.order += 1;
-    //   }
-    // });
+    // Update other items order
+    form.items.forEach((item) => {
+      if (item.order >= updateFormItemDto.order && item.id !== formItem.id) {
+        item.order += 1;
+      }
+    });
     // Update form
-    formItem.form.updatedBy = user.userId;
-    await this.formItemRepository.save(formItem);
-    // await this.formItemRepository.save(form.items);
-    return response('Form item updated successfully');
+    form.updatedBy = user.userId;
+    form.updatedAt = new Date();
+    return await this.formItemRepository.manager.transaction(async (manager) => {
+      await manager.save(form.items);
+      await manager.save(formItem);
+      return response('Form item updated successfully', formItem);
+    });
   }
 
-  async remove(uuid: string) {
-    const form = await this.formItemRepository.findOne({ where: { uuid } });
-    if (!form) {
+  async remove(id: number, user: any) {
+    const formItem = await this.formItemRepository.findOne({ where: { id }, relations: ['form'] });
+    if (!formItem) {
       throw new NotFoundException('Form item not found');
     }
-    await this.formItemRepository.remove(form);
-    return response('Form item removed successfully');
+    const form = await this.formRepository.findOne({
+      where: { id: formItem.form.id },
+      relations: ['items']
+    });
+    if (!form) {
+      throw new NotFoundException('Form not found');
+    }
+
+    // Update other items order
+    form.items.forEach((item) => {
+      if (item.order > formItem.order) {
+        item.order -= 1;
+      }
+    });
+    // Update form
+    form.updatedBy = user.userId;
+    form.updatedAt = new Date();
+    return await this.formItemRepository.manager.transaction(async (manager) => {
+      await manager.save(form.items);
+      await manager.remove(formItem);
+      return response('Form item removed successfully');
+    });
   }
 }

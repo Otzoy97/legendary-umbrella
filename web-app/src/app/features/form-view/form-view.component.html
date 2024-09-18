@@ -1,0 +1,67 @@
+<div *ngIf="loadingPage" class="flex justify-content-center align-items-center">
+  <p-progressSpinner strokeWidth="8" animationDuration=".5s"></p-progressSpinner>
+</div>
+
+<ng-container *ngIf="!loadingPage && !formSent">
+  <p-card>
+    <div class="grid">
+      <div class="col">
+        <h2>{{form.name}}</h2>
+      </div>
+    </div>
+    <div class="grid" *ngIf="form.description">
+      <hr>
+      <div class="col">
+        <p>{{form.description}}</p>
+      </div>
+    </div>
+  </p-card>
+  <form [formGroup]="formGroup">
+    <ng-container *ngFor="let item of formItems">
+      <div class="grid my-2">
+        <div class="col">
+          <p-card styleClass="mt-2">
+            <ng-template pTemplate="content">
+              <app-formControl [control]="control(item.id+'')" [formItem]="item"></app-formControl>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </ng-container>
+    <div class="grid my-2">
+      <div class="col">
+        <p-card>
+          <div class="flex justify-content-end">
+            <button type="button" pRipple pButton label="Send response" (click)="submit()"
+              class="p-button-success"></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </form>
+
+
+</ng-container>
+
+<ng-container *ngIf="formSent">
+  <p-card>
+    <div class="grid">
+      <div class="col">
+        <h2>{{form.name}}</h2>
+      </div>
+    </div>
+    <div class="grid" *ngIf="form.description">
+      <hr>
+      <div class="col">
+        <p>{{form.description}}</p>
+      </div>
+    </div>
+  </p-card>
+  <br>
+  <p-card>
+    <div class="flex flex-column align-items-center">
+      <h2>The response has been sent</h2>
+      <button type="button" pRipple pButton label="Send another response" (click)="resetForm()"></button>
+    </div>
+  </p-card>
+</ng-container>

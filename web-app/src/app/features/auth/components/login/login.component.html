@@ -1,5 +1,5 @@
 <form [formGroup]="formDetails">
-  <div class="grid">
+  <div class="grid" class="my-2">
     <div class="col-12">
       <span class="p-float-label">
         <input formControlName="username" type="text" id="username" pInputText autocomplete="username"
@@ -11,7 +11,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="grid">
+  <div class="grid" class="my-2">
     <div class="col-12">
       <span class="p-float-label">
         <input formControlName="password" type="password" id="password" pInputText autocomplete="current-password"
@@ -28,9 +28,9 @@
       <button pButton pRipple label="Log in" style="width: 100%" (click)="logIn()"></button>
     </div>
   </div>
-  <div class="grid">
+  <!-- <div class="grid">
     <div class="col-12">
       Don't have an account? <a [routerLink]="['/auth/password-forgot']">Sign up!</a>
     </div>
-  </div>
+  </div> -->
 </form>

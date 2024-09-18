@@ -1,1 +1,56 @@
-<p>form-control works!</p>
+<form [formGroup]="formGroup">
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-6">
+      <div class="flex flex-column">
+        <p-editor formControlName="name">
+          <ng-template pTemplate="header">
+            <span class="ql-formats">
+              <button type="button" class="ql-bold" aria-label="Bold"></button>
+              <button type="button" class="ql-italic" aria-label="Italic"></button>
+              <button type="button" class="ql-underline" aria-label="Underline"></button>
+              <button type="button" class="ql-strike" aria-label="Strike"></button> 
+              <button type="button" class="ql-clean" aria-label="Clear"></button>
+            </span>
+          </ng-template>
+        </p-editor>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-6">
+      <div class="grid p-fluid">
+        <div class="col">
+          <div class="field">
+            <p-dropdown [options]="itemTypes" placeholder="Item type" formControlName="type" optionLabel="label"
+              optionValue="value"></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <!---------------------------------------->
+      <!---------------- SINGLE ---------------->
+      <!--------------- MULTIPLE --------------->
+      <!---------------------------------------->
+      <ng-container *ngIf="itemType === 'single' || itemType === 'multiple'">
+        <div class="grid p-fluid">
+          <div class="col">
+            <div class="field">
+              <label for="options">Elements</label>
+              <p>Add elements separated by a new line</p>
+              <textarea formControlName="options" id="options" pInputTextarea style="resize: none;"></textarea>
+            </div>
+            <span class="text-pink-500" *ngIf="formGroup.get('options').hasError('required')">
+              * This field is required
+            </span>
+          </div>
+        </div>
+      </ng-container>
+      <div class="grid p-fluid">
+        <div class="col">
+          <div class="field">
+            <p-inputSwitch formControlName="required" />
+            <label for="required">Required</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

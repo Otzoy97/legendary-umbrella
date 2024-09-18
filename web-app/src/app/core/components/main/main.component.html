@@ -7,11 +7,12 @@
   [class]="app.topbarColor + ' ' + app.menuColor">
 
   <div class="layout-top">
-    <app-topbar></app-topbar>
+    <ng-container *ngIf="innerTopBarVisible">
+      <app-topbar></app-topbar>
+      <div class="layout-topbar-separator"></div>
+      <app-breadcrumb></app-breadcrumb>
+    </ng-container>
 
-    <div class="layout-topbar-separator"></div>
-
-    <app-breadcrumb></app-breadcrumb>
   </div>
 
   <div class="layout-content">

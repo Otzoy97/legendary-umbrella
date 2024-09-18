@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { FormUpdateComponent } from '../form-update/form-update.component';
-import { FormService } from '../../services/form-service.service';
 import { LoadService } from '../../../../core/services/load.service';
+import { FormService } from '../../services/form.service';
+import { FormUpdateComponent } from '../form-update/form-update.component';
+import { Form } from '../../../../shared/interfaces/form.interface';
 
 @Component({
   selector: 'app-formIndexTableMenu',
@@ -13,7 +14,7 @@ import { LoadService } from '../../../../core/services/load.service';
 })
 export class FormIndexTableMenuComponent implements OnDestroy {
 
-  @Input() form: any;
+  @Input() form: Form;
   public menuItems$: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
   private subs: Subscription = new Subscription();
   private updateDialog: DynamicDialogRef<FormUpdateComponent>;
@@ -38,12 +39,12 @@ export class FormIndexTableMenuComponent implements OnDestroy {
     const items: MenuItem[] = [
       {
         label: 'Edit items',
-        icon: 'pi pi-pencil',
+        icon: 'pi pi-file-edit',
         command: () => this.edit(form)
       },
       {
         label: 'Update details',
-        icon: 'pi pi-pencil',
+        icon: 'pi pi-pen-to-square',
         command: () => this.update(form)
       },
       {
@@ -56,14 +57,14 @@ export class FormIndexTableMenuComponent implements OnDestroy {
   }
 
   private edit(form: any): void {
-    this.router.navigate([`/forms/${form.id}`]);
+    this.router.navigate(['forms', form.id, 'editor']);
   }
 
   update(form: any) {
     this.updateDialog = this.dialogService.open(FormUpdateComponent, {
-      header: 'Change form name',
-      width: "300px",
-      height: "275px",
+      header: 'Update form details',
+      width: '400px',
+      height: '400px',
       data: {
         id: form.id,
         name: form.name,
@@ -97,13 +98,11 @@ export class FormIndexTableMenuComponent implements OnDestroy {
     this.subs.add(
       this.formService.delete(form.id).subscribe({
         next: (res) => {
-          if (res.ok) {
-            this.messageService.add({
-              severity: 'success',
-              detail: 'Form deleted successfully'
-            });
-            this.loadService.emitEvent('FormIndex', true);
-          }
+          this.messageService.add({
+            severity: 'success',
+            detail: res.message || 'Form deleted successfully'
+          });
+          this.loadService.emitEvent('FormIndex', true);
         },
         error: (err) => {
           this.messageService.add({

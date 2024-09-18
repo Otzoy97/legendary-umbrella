@@ -11,10 +11,4 @@ export class User {
 
     @Column({ type: 'varchar' })
     password: string;
-
-    @CreateDateColumn({ type: 'datetime' })
-    createdAt: Date;
-    
-    @CreateDateColumn({ type: 'datetime' })
-    updatedAt: Date;
 }

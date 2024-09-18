@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FormResponse } from './entities/form-response.entity';
 import { FormModule } from 'src/form/form.module';
 import { FormItemModule } from 'src/form-item/form-item.module';
-import { FormResponseItem } from 'src/form-response-item/entities/form-response-item.entity';
+import { FormResponseItem } from 'src/form-response/entities/form-response-item.entity';
 
 @Module({
   imports: [

@@ -11,16 +11,15 @@ export class FormItemController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':formId')
-  create(
+  async create(
     @Param('formId') formId: string,
     @Body() createFormItemDto: CreateFormItemDto,
     @Req() req: Request
   ) {
     const user = req.user;
-    return this.formItemService.create(+formId, createFormItemDto, user);
+    return await this.formItemService.create(+formId, createFormItemDto, user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':formId')
   findAll(
     @Param('formId') formId: string
@@ -29,24 +28,29 @@ export class FormItemController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':uuid')
-  findOne(@Param('uuid') uuid: string) {
-    return this.formItemService.findOne(uuid);
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.formItemService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':uuid')
-  update(
-    @Param('uuid') uuid: string, 
+  @Patch(':id')
+  async update(
+    @Param('id') id: string, 
     @Body() updateFormItemDto: UpdateFormItemDto,
-    @Req() req: Request) {
+    @Req() req: Request
+  ) {
     const user = req.user;
-    return this.formItemService.update(uuid, updateFormItemDto, user);
+    return await this.formItemService.update(+id, updateFormItemDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':uuid')
-  remove(@Param('uuid') uuid: string) {
-    return this.formItemService.remove(uuid);
+  @Delete(':id')
+  remove(
+    @Param('id') id: string,
+    @Req() req: Request
+  ) {
+    const user = req.user;
+    return this.formItemService.remove(+id, user);
   }
 }

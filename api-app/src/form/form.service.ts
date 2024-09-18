@@ -19,14 +19,14 @@ export class FormService {
    * @param createFormDto 
    * @returns 
    */
-  create(createFormDto: CreateFormDto, user: any) {
+  async create(createFormDto: CreateFormDto, user: any) {
     const form = {
       ...createFormDto,
       createdBy: user.userId,
       updatedBy: user.userId
     }
-    this.formRepository.create(form);
-    return response('Form created successfully');
+    const persistedForm = await this.formRepository.save(form);
+    return response('Form created successfully', persistedForm);
   }
 
   /**
@@ -40,14 +40,22 @@ export class FormService {
     const [forms, total] = await this.formRepository.findAndCount({
       skip: (page - 1) * pageSize,
       take: pageSize,
-      relations: ['createdBy', 'updatedBy']
-  });
+      relations: ['createdBy', 'updatedBy'],
+      select: {
+        createdBy: {
+          id: true,
+          username: true,
+        },
+        updatedBy: {
+          id: true,
+          username: true,
+        }
+      }
+    });
 
     const payload = {
       data: forms,
-      total,
-      currentPage: page,
-      totalPages: Math.ceil(total / pageSize)
+      total
     };
     return response('Forms retrieved successfully', payload);
   }
